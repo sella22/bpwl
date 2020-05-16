@@ -1,6 +1,48 @@
 <!DOCTYPE html>
 <html>
+<?php
+    include_once("config.php");
+    $result = mysql_query($conn, "SELECT Monthname(bulan) as bulan,umum,bpjs,penjamin,lain FROM bpjs ORDER BY MONTH(bulan) DESC");
+$bulan="";
+$umum="";
+$bpjs="";
+$penjamin="";
+$lain="";
+while($res = mysqli_fetch_array($result)){
+    $bulan=$bulan."'".$res['bulan']."',";
+    $umum=$umum."".$res['umum']."',";
+    $bpjs=$bpjs."".$res['bpjs']."',";
+    $penjamin=$penjamin."".$res['penjamin']."',";
+    $lain=$lain."".$res['lain']."',";
+}
 
+echo "<script class='code-js' id='code-js'>
+
+        var data = {
+            categories: [$bulan],
+            series: [
+                {
+                    name: 'Pendapatan Umum ',
+                    data: [$tersedia]
+                },
+                {
+                    name: ' Pendapatan BPJS',
+                    data: [$tersedia]
+                },
+                {
+                    name: 'Pendapatan PENJAMIN LAINNYA(JASA RAHARJA & JAMKESMASKOT)',
+                    data: [$tersedia]
+                },
+                {
+                    name: 'Pendapatan Lainnya',
+                    data: [$dikonsumsi]
+                }
+            ]
+        };
+
+</script>";
+
+?>
 <head lang="kr">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
@@ -22,41 +64,20 @@
 <script src='./dist/tui-chart.js'></script>
 <script class='code-js' id='code-js'>
 var container = document.getElementById('chart-area');
-var data = {
-    categories: ['january','february','march','april','may','june'],
-    series: [
-        {
-            name: 'Pendapatan umum',
-            data: [758572355,590795597,742458459,269980242,270522786,400563964]
-        },
-        {
-            name: 'Pendapatan BPJS',
-            data: [1995505066,1692737583,1683242700,643203424,635799502,1020974452]
-        },
-        {
-            name: 'Pendapatan penjaminan',
-            data: [0,0,6941237,6941237,6941237,16941237]
-        },
-        {
-            name: 'Pendapatan Lainnya',
-            data: [53472548,48745093,53007725,240610643,260383694,459831329]
-        }
-    ]
-};
+
 var options = {
     chart: {
         width: 1160,
         height: 650,
-        title: 'Grafik Pendapatan Tahun 2017',
-        format: '1,000'
+        title: 'Grafik BPJS',
     },
     yAxis: {
         title: 'Bulan'
     },
     xAxis: {
-        title: 'Pendapatan',
+        title: 'Dana',
         min: 0,
-        max: 1995505066,
+        max: 32.95,
     },
      series: {
          showLabel: true
@@ -90,3 +111,4 @@ tui.chart.columnChart(container, data, options);
 <script src='./js/example.js'></script>
 </body>
 </html>
+
